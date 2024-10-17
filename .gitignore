@@ -1,1 +1,8 @@
+# Files
 .env
+test.js
+
+
+# Directories
+downloads
+node_modules
