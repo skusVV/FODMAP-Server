@@ -35,4 +35,30 @@ export default class ImageService {
 
     }
 
+
+    async checkImageExists(file_name, res) {
+        console.log("Checking image names...");
+        const file = this.bucket.file(file_name);
+
+        try {
+            const data = await file.exists()
+            const exists = data[0];
+
+            if (exists) {
+                console.log(`File: '${file_name}' already exists. Image upload aborted.`);
+                res.status(409).send({error_message: `File: '${file_name}' already exists. Please rename image file and try again.`})
+                return true
+            } else {
+                console.log(`Upload permitted. File: '${file_name}' does not exist. `);
+                return false
+            };
+
+        } catch (error) {
+            console.error('Error checking file existence', error);
+            res.status(500).send({ error_message: 'Error checking file existence. Image not uploaded.' });
+            return true;
+        };
+         
+    };
+
 }

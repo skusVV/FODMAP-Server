@@ -8,17 +8,23 @@ export const recipeRoutes = (app, sql, upload, bucket) => {
     app.post('/api/new_recipe_submitted', upload.single('recipe_image'), async (req, res) => {
 
         try {
+            // Check if file-name already exists in GCS to prevent overwriting data
             const uploadRecipeImage = new ImageService(bucket);
-            await uploadRecipeImage.uploadImage(req.file);
+            const imageName = req.file.originalname;
+            const fileExists = await uploadRecipeImage.checkImageExists(imageName, res);
 
-            const uploadRecipe = new RecipeService(sql);
-            await uploadRecipe.uploadRecipeData(JSON.parse(req.body.recipe_details), res);
+            if (!fileExists) {
+                await uploadRecipeImage.uploadImage(req.file);
 
-            res.status(201)
+                const uploadRecipe = new RecipeService(sql);
+                await uploadRecipe.uploadRecipeData(JSON.parse(req.body.recipe_details), res);
+
+                res.status(201);
+            };
 
         } catch (err) {
             console.log(err);
-            res.status(500).send("Internal Service Error")
+            res.status(500).send("Internal Service Error");
         };
     
     });

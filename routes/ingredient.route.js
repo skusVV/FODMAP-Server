@@ -51,7 +51,7 @@ export const ingredientRoutes = (app, sql) => {
             console.log(err);
             res.status(500).send("Internal Service Error")
         }
-        
+
     });
     
 };
