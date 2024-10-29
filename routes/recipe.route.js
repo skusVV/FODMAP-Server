@@ -47,7 +47,7 @@ export const recipeRoutes = (app, sql, upload, bucket) => {
         const methods = await sql`
             SELECT step_number, instruction
             FROM test_meal_methods as tmm
-            WHERE tmm.meal_id = 70;`;
+            WHERE tmm.meal_id = ${ meal_id };`;
     
     
         const methodArray = methods.map( step => step.instruction);

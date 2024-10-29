@@ -7,7 +7,7 @@ export default class IngredientService {
     }
 
 
-    async uploadIngredientData(ingredient, res) {
+    async uploadNewIngredient(ingredient, res) {
 
         try {
             console.log('New ingredient upload triggered');
@@ -15,14 +15,14 @@ export default class IngredientService {
             const {name, detail, category} = ingredient;
 
             await this.sql`
-                    INSERT INTO test_ingredients
+                    INSERT INTO ingredients
                         (ingredient_name, ingredient_detail, ingredient_category)
                     VALUES
                         (${capitalise(name)}, ${capitalise(detail)}, ${category})
                 `
 
             res.status(201).json({ saved_data: ingredient });
-            console.log('Data added successfully to database');
+            console.log(`${capitalise(name)} ${capitalise(detail)} added successfully to database`);
             
         } catch (error) {
             console.error('Error inserting data:', error);
@@ -44,7 +44,7 @@ export default class IngredientService {
             }
 
             await this.sql`
-                UPDATE test_ingredients
+                UPDATE ingredients
                 SET ${
                     this.sql(updatedIngredient, 'ingredient_name', 'ingredient_detail', 'ingredient_category')
                 }

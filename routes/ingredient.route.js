@@ -7,7 +7,7 @@ export const ingredientRoutes = (app, sql) => {
     app.get('/api/all-ingredients', async (request, response) => {
         
         const data = await sql`
-            SELECT * FROM test_ingredients
+            SELECT * FROM ingredients
             ORDER BY ingredient_name;`;
 
         response.send(data);
@@ -33,7 +33,7 @@ export const ingredientRoutes = (app, sql) => {
 
         try {
             const uploadIngredient = new IngredientService(sql)
-            await uploadIngredient.uploadIngredientData((req.body), res);
+            await uploadIngredient.uploadNewIngredient((req.body), res);
         } catch (err) {
             console.log(err);
             res.status(500).send("Internal Service Error")
