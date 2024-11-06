@@ -29,6 +29,24 @@ export const recipeRoutes = (app, sql, upload, bucket) => {
     
     });
 
+    app.get('/recipes', async (req, res) => {
+        const recipes = await sql`
+        SELECT test_meal_id, meal_name, gcs_file_name
+        FROM test_meals`
+
+
+        const RecipeImage = new ImageService(bucket);
+
+        const asyncRes = await Promise.all(recipes.map(async rec => {
+            return {   
+                ...rec,
+            image_url: await RecipeImage.get_image_url(rec.gcs_file_name)
+            }
+        }))
+
+        res.send(asyncRes);
+        res.status(200)
+    });
 
     app.get('/recipe-id/:id', async (req, res) => {
 

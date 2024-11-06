@@ -36,6 +36,30 @@ export default class ImageService {
     }
 
 
+    async get_image_url(file_name) {
+        
+        try {
+            const file = this.bucket.file(file_name);
+            const imgConfig = {
+                action: 'read',
+                expires: Date.now() + 1000 * 60 * 60, // one hour
+            };
+            
+            const url = await new Promise((resolve, reject) => {
+                file.getSignedUrl(imgConfig, (err, url) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(url)
+                }})
+            });
+            return url;
+
+        } catch (error) {
+            console.error('Error getting image url', error);
+        }
+    }
+
     async checkImageExists(file_name, res) {
         console.log("Checking image names...");
         const file = this.bucket.file(file_name);
