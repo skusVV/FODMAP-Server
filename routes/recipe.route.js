@@ -88,7 +88,8 @@ export const recipeRoutes = (app, sql, upload, bucket) => {
 
     const ingredients = await sql`
             SELECT i.ingredient_name, i.ingredient_detail, tmi.ingredient_amount, tmi.ingredient_unit
-            FROM test_meal_ingredients AS tmi INNER JOIN ingredients as I
+            FROM test_meal_ingredients AS tmi
+            INNER JOIN ingredients as I
             ON tmi.ingredient_id = i.ingredient_id
             WHERE tmi.meal_id = ${meal_id};`;
 

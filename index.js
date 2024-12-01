@@ -15,6 +15,7 @@ import {
 // Routes
 import { ingredientRoutes } from "./routes/ingredient.route.js";
 import { recipeRoutes } from "./routes/recipe.route.js";
+import { mealsRoutes } from "./routes/meals.route.js";
 
 const cloudStorage = new Storage({
     credentials: JSON.parse(GCS_CREDENTIALS),
@@ -43,5 +44,6 @@ app.use(cors());
 // Routes:
 ingredientRoutes(app, sql);
 recipeRoutes(app, sql, upload, bucket);
+mealsRoutes(app, sql, bucket);
 
 app.listen(3001, console.log("listening on port 3001"));
