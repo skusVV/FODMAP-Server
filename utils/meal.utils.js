@@ -1,6 +1,6 @@
-import { capitalise } from "../services/normalisation.service.js";
+import { capitalise } from "./global.utils.js";
 
-export const weekdays = [
+const weekdays = [
   "Monday",
   "Tuesday",
   "Wednesday",
@@ -15,6 +15,7 @@ export function groupBy(array) {
   const groups = {};
   for (let item of array) {
     const day = item.scheduled_meal_date.getDay();
+    console.log(item.scheduled_meal_date);
     const weekday = weekdays[day - 1];
     const time = capitalise(item.meal_time);
 

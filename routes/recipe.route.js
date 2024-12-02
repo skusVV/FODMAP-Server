@@ -1,6 +1,6 @@
 import ImageService from "../services/image.service.js";
 import RecipeService from "../services/recipe.service.js";
-import paginate from "../services/pagination.service.js";
+import paginate from "../utils/recipe.utils.js";
 
 const TABLE_NAME = "test_meals"
 

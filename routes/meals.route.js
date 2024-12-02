@@ -1,6 +1,6 @@
 import { data } from "../test.js";
 import ImageService from "../services/image.service.js";
-import { addAllDays, groupBy } from "../services/meals.service.js";
+import { addAllDays, groupBy } from "../utils/meal.utils.js";
 import { addDays, formatISO } from "date-fns";
 
 /*

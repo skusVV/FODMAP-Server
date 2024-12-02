@@ -1,4 +1,4 @@
-async function paginate(sql, query, table_name) {
+export default async function paginate(sql, query, table_name) {
   const currentPage = parseInt(query.page);
   const limit = parseInt(query.limit);
 
@@ -11,5 +11,3 @@ async function paginate(sql, query, table_name) {
 
   return { totalRecords, totalPages, currentPage, limit };
 }
-
-export default paginate;
