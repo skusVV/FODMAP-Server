@@ -1,3 +1,4 @@
+import { addDays, formatISO } from "date-fns";
 import { capitalise } from "./global.utils.js";
 
 const weekdays = [
@@ -10,13 +11,14 @@ const weekdays = [
   "Sunday",
 ];
 
-export function groupBy(array) {
+export function groupByDate(array) {
   // Groups database array by day of the week and meal
+
   const groups = {};
   for (let item of array) {
-    const day = item.scheduled_meal_date.getDay();
-    console.log(item.scheduled_meal_date);
-    const weekday = weekdays[day - 1];
+    const date = formatISO(item.scheduled_meal_date, {
+      representation: "date",
+    });
     const time = capitalise(item.meal_time);
 
     const item_details = {
@@ -25,19 +27,32 @@ export function groupBy(array) {
       image_url: item.image_url,
     };
 
-    if (!groups[weekday]) {
-      groups[weekday] = { [time]: item_details };
+    if (!groups[date]) {
+      groups[date] = { [time]: item_details };
     } else {
-      groups[weekday][time] = item_details;
+      groups[date][time] = item_details;
     }
   }
   return groups;
 }
 
-export function addAllDays(array) {
-  for (let day of weekdays) {
+export function addRemainingDays(startDate, array) {
+  const firstDay = new Date(startDate);
+  const days = [];
+
+  for (let i = 0; i < 7; i++) {
+    const fullDate = addDays(firstDay, i);
+    const dateString = formatISO(fullDate, {
+      representation: "date",
+    });
+    days.push(dateString);
+  }
+
+  for (let day of days) {
     if (!array[day]) {
       array[day] = {};
     }
   }
+
+  return array;
 }

@@ -1,13 +1,13 @@
 import { data } from "../test.js";
 import ImageService from "../services/image.service.js";
-import { addAllDays, groupBy } from "../utils/meal.utils.js";
+import { addRemainingDays, groupByDate } from "../utils/meal.utils.js";
 import { addDays, formatISO } from "date-fns";
 
 /*
 Tasks: 
-update meal at date
+- update meal at date
 remove meal at date
-add meal to date
+- add meal to date
 - view all meals per week
 */
 
@@ -45,10 +45,13 @@ export const mealsRoutes = (app, sql, bucket) => {
         })
       );
 
-      const meal_plan_data = groupBy(db_data_with_url);
-      addAllDays(meal_plan_data);
+      const groupedMealPlanData = groupByDate(db_data_with_url);
+      const mealPlanData = addRemainingDays(
+        startDateString,
+        groupedMealPlanData
+      );
 
-      response.send({ weekCommencing: startDateString, meals: meal_plan_data });
+      response.send({ weekCommencing: startDateString, meals: mealPlanData });
       response.status(200);
     } catch (error) {
       console.error(error);
@@ -66,7 +69,45 @@ export const mealsRoutes = (app, sql, bucket) => {
             (${user_id}, ${meal_id}, ${scheduled_meal_date}, ${meal_time})
           `;
       console.log("successfully added meal plan to db");
-      response.status();
+      response.status(201);
+    } catch (error) {
+      console.error(error);
+      response.status(500);
+    }
+  });
+
+  app.patch("/api/schedule_meal", async (request, response) => {
+    const { user_id, meal_id, scheduled_meal_date, meal_time } = request.body;
+
+    try {
+      const [get_record] = await sql`
+        SELECT EXISTS (
+            SELECT 1 FROM test_meal_plan
+            WHERE
+              user_id=${user_id} AND scheduled_meal_date=${scheduled_meal_date} AND meal_time=${meal_time}
+        )
+      `;
+
+      if (get_record.exists) {
+        const db_entry = await sql`
+            UPDATE test_meal_plan
+            SET
+              meal_id = ${meal_id}
+            WHERE
+              user_id=${user_id} AND scheduled_meal_date=${scheduled_meal_date} AND meal_time=${meal_time}
+        `;
+
+        console.log("successfully updated meal plan in db");
+        response.status();
+      } else {
+        response.status(400);
+        response.json({
+          message: "Unable to find the following record",
+          user: user_id,
+          date: scheduled_meal_date,
+          time: meal_time,
+        });
+      }
     } catch (error) {
       console.error(error);
       response.status(500);
