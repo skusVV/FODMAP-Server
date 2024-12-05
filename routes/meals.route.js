@@ -12,6 +12,10 @@ remove meal at date
 */
 
 export const mealsRoutes = (app, sql, bucket) => {
+  app.get("/api/test", (req, res) => {
+    res.send({ message: "hello" });
+  });
+
   app.get("/api/meal_planner", (request, response) => {
     response.send(JSON.stringify(data));
     response.status(201);
