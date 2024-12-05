@@ -8,7 +8,7 @@ module.exports = {
   },
   output: {
     filename: 'index.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'public'),
     libraryTarget: 'commonjs2' // Add this line to handle module exports correctly
   },
   target: 'node',
