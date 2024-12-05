@@ -40,7 +40,9 @@ const app = express();
 app.use(express.json()); // This is the bodyparser to allow the server to parse incoming JSON data
 app.use(express.urlencoded({ extended: true })); // This is the bodyparser to allow the server to parse incoming x-www-form-urlencoded data
 app.use(cors());
-
+app.get('/', (req, res) => {
+    return res.send('test');
+});
 // Routes:
 ingredientRoutes(app, sql);
 recipeRoutes(app, sql, upload, bucket);
