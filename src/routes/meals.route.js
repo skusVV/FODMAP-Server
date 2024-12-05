@@ -1,4 +1,4 @@
-import { data } from "../test.js";
+import { data } from "../../test.js";
 import ImageService from "../services/image.service.js";
 import { addRemainingDays, groupByDate } from "../utils/meal.utils.js";
 import { addDays, formatISO } from "date-fns";

@@ -10,7 +10,7 @@ import {
     DATABASE_USER,
     GCS_CREDENTIALS,
     PROJECT_ID,
-} from "./config.js";
+} from "../config.js";
 
 // Routes
 import { ingredientRoutes } from "./routes/ingredient.route.js";
