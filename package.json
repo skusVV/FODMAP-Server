@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
+        "build": "cp -r ./src ./dist",
         "start": "nodemon index.js"
     },
     "type": "module",
